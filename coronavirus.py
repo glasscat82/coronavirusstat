@@ -22,6 +22,13 @@ class CoronaVirus():
         # return re.sub("^\s+|\n|\r|\t|\s+$", '', now).replace('+', ' +')   	
         return ' '.join(re.sub("^\s+|\r|\t|\s+$", '', now).split()).replace(' +', '+').replace('+', ' +')
 
+    @staticmethod
+    def get_mortality_description():
+        mortality_ = []
+        mortality_.append('*Летальность 1 = Умершие/(Случаев)*100')
+        mortality_.append('*Летальность 2 = Умершие/(Вылеченные+Умершие)*100')
+        return mortality_
+    
     def write_json(self, data):
         with open(self.filename, 'w', encoding='utf8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
@@ -48,7 +55,8 @@ class CoronaVirus():
             return False
         soup = BeautifulSoup(html, 'lxml')
         teg_ = soup.find('body').find_all('div', class_='container')
-        # ----
+        
+        # ---- the Header for Russia
         h = []
         for h_ in soup.find('body').find_all('h1', class_='h2 font-weight-bold'):
             p_ = h_.parent	
@@ -56,6 +64,7 @@ class CoronaVirus():
             for ht_ in p_.find('div', class_='row justify-content-md-center').find_all('div', class_='col col-6 col-md-3 pt-4'):			
                 l_.append([x.text.strip() for x in ht_.find_all('div')])			
             h.append({'h1':[p_.find('h1').text.strip(), p_.find('h6').text.strip().replace('Обновление через','')], 'body':l_})
+        
         # ---- the statistics for Russia
         links = []
         for row_ in teg_[1].find_all('div',class_='c_search_row'):
@@ -67,7 +76,7 @@ class CoronaVirus():
             row.append(a_)
             row.append(name_)
 
-            #---- the table select ----
+            # ---- the table select ----
             num_ = row_.find('div',class_='p-1 col-7 row m-0')          
             for d_ in num_.find_all('div', class_='p-1'):                
                 ns_ = d_.find('div', class_='small text-muted').text.strip()
@@ -77,9 +86,28 @@ class CoronaVirus():
             links.append(row)
         
         # ---- the statistics for world
-        w_ = []
-        # for country in teg_[1].find_all('div',class_='c_search2_row'):
-        #     wl_ = []
-        #     w_.append(wl_)
+        worlds_ = []
+        for country in teg_[1].find_all('div',class_='c_search2_row'):
+            country_name_ = country.find('div', class_='p-2 col-4').find('span', class_='h6')
+            country_name_text_ = country_name_.text.strip()
+            country_name_url_ = country_name_.find('a').get('href')
+            #
+            country_description_ = country.find('div', class_='p-2 col-4').find('div', class_='small text-muted')
+            country_description_.find('span').extract()
+         
+            # ---- the country from world
+            w_ = []
+            w_.append(country_name_url_)
+            w_.append(country_name_text_)
+            w_.append(country_description_.text.strip())
+
+            # ---- the table select
+            table_ = country.find('div', class_='p-1 col-8 row')
+            for t_ in table_.find_all('div', class_='p-1'):
+                ts_ = t_.find('div', class_='small text-muted').text.strip()
+                th_ = self.dntr(t_.find('div', class_='h6').text.strip())
+                w_.append([ts_, th_])
+
+            worlds_.append(w_)
         
-        return {'header':h, 'links':links, 'worlds':w_}
+        return {'header':h, 'links':links, 'worlds':worlds_}

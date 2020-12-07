@@ -25,11 +25,21 @@ def main():
 	x = PrettyTable()
 	x.field_names = ["№", "Регион", "Случаев", "Активных", "Вылечено", "Умерло", "Летальность*"]
 	x.align["Регион"] = "l"
+	x.align["Случаев"] = "l"
 	for index, r_ in enumerate(teg_['links'], 1):
 		x.add_row([index, r_[1], r_[2][1], r_[3][1], r_[4][1], r_[5][1], r_[6][1]])
 	# # x.sortby = "Умерло"
 	# # x.reversesort = True
 	print(x.get_string(title = teg_header_))
+
+	# ---
+	x = PrettyTable()
+	x.field_names = ["№", "Страна", "Активных", "Вылечено", "Умерло", "Летальность*", "Случаев"]
+	x.align["Страна"] = "l"
+	x.align["Активных"] = "l"
+	for index, w_ in enumerate(teg_['worlds'], 1):	
+		x.add_row([index, w_[1], w_[3][1], w_[4][1], w_[5][1], w_[6][1], w_[7][1]])
+	print(x)
 
 	# end
 	end = datetime.now()
