@@ -1,7 +1,7 @@
-# statistics COVID-19 for Russia
+# Statistics COVID-19 for Russia
 parsing coronavirusstat.ru statistics for Russia
 
-## 0. program launch /coronavirusstat.py
+## Program launch /coronavirusstat.py
 tables data output the PrettyTable module
 
 ![coronavirusstat.py](https://github.com/glasscat82/coronavirusstat/blob/master/img/001.png "coronavirusstat.py")
