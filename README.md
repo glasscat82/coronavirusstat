@@ -4,6 +4,8 @@ parsing coronavirusstat.ru statistics for Russia
 ## Program launch /coronavirusstat.py
 tables data output the PrettyTable module
 
-![coronavirusstat.py](https://github.com/glasscat82/coronavirusstat/blob/master/img/001.png "coronavirusstat.py")
+![the Header for Russia](https://github.com/glasscat82/coronavirusstat/blob/master/img/001.png "the Header for Russia")
 
-![coronavirusstat.py](https://github.com/glasscat82/coronavirusstat/blob/master/img/002.png "coronavirusstat.py")
+![the statistics for Russia](https://github.com/glasscat82/coronavirusstat/blob/master/img/002.png "the statistics for Russia")
+
+![the country from world](https://github.com/glasscat82/coronavirusstat/blob/master/img/003.png "the country from world")
