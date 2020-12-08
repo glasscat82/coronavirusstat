@@ -29,12 +29,14 @@ class CoronaVirus():
         mortality_.append('*Летальность 2 = Умершие/(Вылеченные+Умершие)*100')
         return mortality_
     
-    def write_json(self, data):
-        with open(self.filename, 'w', encoding='utf8') as f:
+    def write_json(self, data, path = None):
+        path = self.filename if path is None else path
+        with open(path, 'w', encoding='utf8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
-    def load_json(self):
-        with open(self.filename, 'r', encoding='utf-8') as f:
+    def load_json(self, path = None):
+        path = self.filename if path is None else path
+        with open(path, 'r', encoding='utf-8') as f:
             return json.load(f)
         return {}  
 
@@ -111,3 +113,50 @@ class CoronaVirus():
             worlds_.append(w_)
         
         return {'header':h, 'links':links, 'worlds':worlds_}
+
+    # the return country URL links
+    def get_country_links(self, html):
+        if html is False:
+            return False
+        soup = BeautifulSoup(html, 'lxml')
+        teg_ = soup.find('body').find_all('div', class_='container')
+        
+        worlds_ = []
+        for country in teg_[1].find_all('div',class_='c_search2_row'):
+            country_name_ = country.find('div', class_='p-2 col-4').find('span', class_='h6')
+            country_name_text_ = country_name_.text.strip()
+            country_name_url_ = country_name_.find('a').get('href')
+            #
+            country_description_ = country.find('div', class_='p-2 col-4').find('div', class_='small text-muted')
+            country_description_.find('span').extract()
+
+            # ---- the country from world
+            w_ = []
+            w_.append(country_name_url_)
+            w_.append(country_name_text_)
+            w_.append(country_description_.text.strip())
+
+            worlds_.append(w_)
+
+        return worlds_
+
+    # the return region links
+    def get_region_links(self, html):
+        if html is False:
+            return False
+        soup = BeautifulSoup(html, 'lxml')
+        teg_ = soup.find('body').find_all('div', class_='container')
+
+        region_ = [] 
+        for row_ in teg_[1].find_all('div',class_='c_search_row'):
+            sity_ = row_.find('div',class_='p-1 col-5').find('span', class_='small')
+            name_ = sity_.text.strip()
+            a_ = sity_.find('a').get('href')
+
+            row = []
+            row.append(a_)
+            row.append(name_)
+            
+            region_.append(row)
+
+        return region_
