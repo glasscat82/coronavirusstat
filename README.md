@@ -21,3 +21,8 @@ return write region json
 return write country json
 
 ![the country](https://github.com/glasscat82/coronavirusstat/blob/master/img/005.png "the country")
+
+## load json /coronanews.py
+return write 20 news json
+
+![the news](https://github.com/glasscat82/coronavirusstat/blob/master/img/006.png "the news")

@@ -41,12 +41,13 @@ class CoronaVirus():
         return {}  
 
     # Random User-Agent
-    def get_html(self):        
+    def get_html(self, url_page = None):        
         ua = fake_useragent.UserAgent() 
         user = ua.random
         header = {'User-Agent':str(user)}
+        url_page = self.url if url_page is None else url_page
         try:
-            page = requests.get(self.url, headers = header, timeout = 10)
+            page = requests.get(url_page, headers = header, timeout = 10)
             return page.text
         except Exception as e:
             print(sys.exc_info()[1])
@@ -160,3 +161,18 @@ class CoronaVirus():
             region_.append(row)
 
         return region_
+
+    def get_news_links(self, html):
+        if html is False:
+            return False
+        soup = BeautifulSoup(html, 'lxml')
+        item = soup.find('body').find('div', class_='row news-list bx-blue')
+
+        news_arr = []
+        for n in item.find_all('div', class_='news-list-item'):
+            header_news = n.find('h4').find('a')
+            news_time = n.find('span', class_ = 'news-list-param')    
+            
+            news_arr.append([header_news.get('href'), header_news.text.strip(), news_time.text.strip()])
+        
+        return news_arr
